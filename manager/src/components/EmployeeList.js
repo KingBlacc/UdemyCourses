@@ -15,7 +15,7 @@ class EmployeeList extends Component{
 
     UNSAFE_componentWillReceiveProps(nextProps){
         this.createDataSource(nextProps);
-    }
+     }
 
     createDataSource({employees}){
         const ds = new ListView.DataSource({
@@ -30,7 +30,6 @@ class EmployeeList extends Component{
     }
 
     render(){
-        console.log(this.props)
         return (
             <ListView
                 enableEmptySections

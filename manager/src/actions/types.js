@@ -6,3 +6,4 @@ export const LOGIN_USER = '151d';
 export const UPDATE_EMPLOYEE = '129nsk';
 export const CREATE_EMPLOYEE = 'kkas s9';
 export const EMPLOYEES_FETCH_SUCCESS = 'jnsj skjhna';
+export const EMPLOYEE_UPDATE_SUCCESS = 'jns osjkj';
