@@ -3,10 +3,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Communcations from 'react-native-communications';
 import EmployeeForm from './EmployeeForm';
-import {employeeUpdate, employeeEdit} from '../actions';
-import {Card, CardSection, Button} from './common';
+import {employeeUpdate, employeeEdit, employeeDelete} from '../actions';
+import {Card, CardSection, Button, Confirm} from './common';
 
 class EmployeeEdit extends Component {
+    state = {showModal: false}
     UNSAFE_componentWillMount(){
         _.each(this.props.employee, (value, prop) => {
             this.props.employeeUpdate({prop, value});
@@ -22,6 +23,12 @@ class EmployeeEdit extends Component {
         const {phone, shift} = this.props;
 
         Communcations.text(phone, `Your upcoming shift is on ${shift}`);
+    }
+
+    onAccept(){
+        const {uid} = this.props.employee;
+
+        this.props.employeeDelete({uid});
     }
 
     render(){
@@ -40,10 +47,17 @@ class EmployeeEdit extends Component {
                     </Button>
                 </CardSection>
                 <CardSection>
-                    <Button onPress={}>
-                        Fire
+                    <Button onPress={() => this.setState({showModal: !this.state.showModal})}>
+                        Fire Employee
                     </Button>
                 </CardSection>
+
+                <Confirm
+                    visible={this.state.showModal}
+                    onAccept={this.onAccept.bind(this)}
+                    onDecline={() => this.setState({showModal: false})}>
+                    Are you sure you want to fire this employee?
+                </Confirm>
             </Card>
         );
     }
@@ -55,4 +69,7 @@ const mapStateToProps = (state) => {
 
     return {name, phone, shift};
 }
-export default connect(mapStateToProps, {employeeUpdate, employeeEdit})(EmployeeEdit);
+export default connect(mapStateToProps, 
+        {employeeUpdate, 
+        employeeEdit, 
+        employeeDelete})(EmployeeEdit);
