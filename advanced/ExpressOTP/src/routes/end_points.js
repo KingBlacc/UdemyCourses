@@ -61,6 +61,7 @@ router.post('/verify', (req, res) => {
     admin.auth().getUser(newphone)
     .then(() => {
         ref.on('value', snapshot => {
+            ref.off();
             const user = snapshot.val();
             
             if(user.code !== code || !user.codeValid){
@@ -68,6 +69,9 @@ router.post('/verify', (req, res) => {
             }
 
             ref.update({codeValid: false});
+            admin.auth().createCustomToken(newphone)
+            .then(token => res.send({token}));
+
         });
     })
     .catch(err => res.send(422).send({error: err}))
