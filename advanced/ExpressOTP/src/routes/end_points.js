@@ -9,19 +9,20 @@ router.post('/otp', (req, res) => {
     }
 
     const phone = String(req.body.phone).replace(/[^\d]/g, '');
+    const newphone = String(phone).replace(0, '+27');
 
-    admin.auth().getUser(phone)
+    admin.auth().getUser(newphone)
     .then(user => {
         const code = Math.floor(Math.random() * 8999 + 1000);
 
         twilio.messages.create({
-            to: phone,
+            to: newphone,
             from: '+17313454894',
             body: `Your code is: ${code}`
         }, (err) => {
             if(err){ return res.status(422).send(err)}
         
-            admin.database().ref(`users/${phone}`)
+            admin.database().ref(`users/${newphone}`)
             .update({code, codeValid: true}, () => {
                 res.send({success: true});
             });
@@ -38,10 +39,38 @@ router.post('/user', (req, res) => {
         }
 
         const phone = String(req.body.phone).replace(/[^\d]/g, '');
+        const newphone = String(phone).replace(0, '+27');
 
-        admin.auth().createUser({ uid: phone })
+        admin.auth().createUser({ uid: newphone })
         .then(user => res.send(user))
         .catch(err => res.status(422).send({error: err}))
 });
 
+router.post('/verify', (req, res) => {
+    if(!req.body.phone || !req.body.code){
+        return res.status(422).send({error: 'Phone and code must be provided'});
+    }
+
+    const phone = String(req.body.phone).replace(/[^\d]/g, '');
+    const newphone = String(phone).replace(0, '+27');
+    
+    const code = parseInt(req.body.code);
+
+    const ref = admin.database().ref(`users/${newphone}`);
+
+    admin.auth().getUser(newphone)
+    .then(() => {
+        ref.on('value', snapshot => {
+            const user = snapshot.val();
+            
+            if(user.code !== code || !user.codeValid){
+                return res.status(422).send({error: 'Code not valid'});
+            }
+
+            ref.update({codeValid: false});
+        });
+    })
+    .catch(err => res.send(422).send({error: err}))
+
+});
 module.exports = router;
