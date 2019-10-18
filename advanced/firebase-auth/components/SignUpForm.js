@@ -3,20 +3,18 @@ import {View} from 'react-native';
 import {Button, Input, Text} from 'react-native-elements';
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:6063/api';
+const BASE_URL = 'http://13205afc.ngrok.io/api';
 
 class SignUpForm extends Component {
-    state = {phone: ''};
+    state = {phone: '', error: ''};
 
-    handleSubmit = () => {
-        axios.post(`${BASE_URL}/user`, {
-            phone: this.state.phone
-        }).then(() => {
-            axios.post(`${BASE_URL}/otp`, {
-                phone: this.state.phone
-            })
-            .catch(console.log({error: 'FAiled to send OTP'}))
-        }).catch(err => console.log({error: 'Failed to create user'}))
+    handleSubmit = async() => {
+       try {
+        await axios.post(`${BASE_URL}/user`, { phone: this.state.phone });
+        await axios.post(`${BASE_URL}/otp`, {phone: this.state.phone});
+       } catch (error) {
+          this.setState({error}); 
+       }
     }
 
     render(){
