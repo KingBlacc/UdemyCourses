@@ -5,7 +5,7 @@ class SettingsScreen extends Component {
     render(){
         return(
             <View>
-                <Text>Auth Screen</Text>
+                <Text>Setting Screen</Text>
             </View>
         );
     }

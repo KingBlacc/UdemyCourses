@@ -1,13 +1,39 @@
-import React, {Component} from 'react';
-import { View } from 'react-native';
-import {createAppContainer} from 'react-navigation';
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import React from 'react';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createMaterialTopTabNavigator} from 'react-navigation-tabs';
+import {Provider} from 'react-redux';
+import store from './src/store';
 import AuthScreen from './src/screens/AuthScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
+import MapScreen from './src/screens/MapScreen';
+import DeckScreen from './src/screens/DeckScreen';
+import SettingScreen from './src/screens/SettingsScreen';
+import ReviewScreen from './src/screens/ReviewScreen';
+import { setNavigator } from './src/navigationRef';
 
-const MainNavigator = createMaterialTopTabNavigator({
-      welcome: {screen: WelcomeScreen},
-      auth: {screen: AuthScreen}
+const reviewFlow = createStackNavigator({
+    Review: ReviewScreen,
+    Setting: SettingScreen
+});
+
+const mapFlow = createMaterialTopTabNavigator({
+    Map: MapScreen,
+    Deck: DeckScreen,
+    reviewFlow
+});
+
+const MainNavigator = createSwitchNavigator({
+      Welcome: WelcomeScreen,
+      Auth: AuthScreen,
+      mapFlow
     });
+const App = createAppContainer(MainNavigator);
 
-export default createAppContainer(MainNavigator);
+export default () => {return (
+    <Provider store={store}>
+        <App
+            ref={(navigator) => {
+                setNavigator(navigator)
+            }}/>
+    </Provider>)}

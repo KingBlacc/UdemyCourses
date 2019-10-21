@@ -1,0 +1,3 @@
+export const FB_LOGIN_SUCCESS = 'njdn kmd md';
+export const FB_LOGIN_FAILED = 'skn djkkns p';
+export const FB_TOKEN = 'fb_token';
