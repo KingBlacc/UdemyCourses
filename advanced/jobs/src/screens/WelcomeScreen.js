@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, AsyncStorage} from 'react-native';
+import _ from 'lodash';
+import { AppLoading } from 'expo';
 import Slides from '../components/Slides';
+import { FB_TOKEN } from '../actions/types';
 
 const SLIDE_DATA = [
     {text: 'Welcome to JobApp', color: '#7B4B94'},
@@ -11,11 +14,27 @@ const SLIDE_DATA = [
 ]
 
 class WelcomeScreen extends Component {
+    state = {token: null}
+
+    async UNSAFE_componentWillMount(){
+        let token = await AsyncStorage.getItem(FB_TOKEN);
+
+        if(token) {
+            this.props.navigation.navigate('Map');
+        }else{
+            this.setState({token: false});
+        }
+    }
+
     onSlideComplete = () => {
         this.props.navigation.navigate('Auth');
     }
 
     render(){
+        if(_.isNull(this.state.token)){
+            return <AppLoading />;
+        }
+
         return(
             <View style={{flex: 1}}> 
                 <Slides 

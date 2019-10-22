@@ -1,7 +1,6 @@
 import { AsyncStorage} from 'react-native'
 import * as Facebook from 'expo-facebook'
 import { FB_LOGIN_SUCCESS, FB_LOGIN_FAILED, FB_TOKEN } from './types';
-import { navigate } from '../navigationRef';
 
 export const facebookLogin = () => async dispatch => {
     let token = await AsyncStorage.getItem(FB_TOKEN);
