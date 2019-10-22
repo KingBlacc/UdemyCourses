@@ -11,6 +11,7 @@ const JOB_QUERY_PARAMS = {
     radius: 10,
     q: 'javascript'
 };
+
 const JOB_SEARCH_URL = 'http://api.indeed.com/ads/apisearch?';
 
 const buildJobsUrl = (zip) => {
@@ -19,13 +20,9 @@ const buildJobsUrl = (zip) => {
 };
 
 export const fetchJobs = (region) => async dispatch =>{
-    try {
-        let zip = await reverseGeocode(region);
+
+        let zip = await reverseGeocode(region).catch(console.log('reverse geocoords'));
         const url = buildJobsUrl(zip);
-        let {data} = await axios.get(url);
+        let {data} = await axios.get(url).catch(console.log('Axios'));
         dispatch({type: FETCH_JOBS, payload: data});
-        console.log(data);
-    } catch (error) {
-        console.log(error);
-    }
 };
