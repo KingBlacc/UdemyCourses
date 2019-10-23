@@ -1,7 +1,7 @@
 import axios from 'axios';
 import reverseGeocode from 'latlng-to-zip';
 import qs from 'qs';
-import { FETCH_JOBS, LIKE_JOB } from './types';
+import { FETCH_JOBS, LIKE_JOB, CLEAR_LIKED_JOBS } from './types';
 import JOB_DATA from './IndeedJobData.json';
 
 const JOB_QUERY_PARAMS = {
@@ -36,3 +36,7 @@ export const fetchJobs = (region, callback) => async dispatch =>{
 export const likeJob = (job) => {
     return {type: LIKE_JOB,payload: job};
 };
+
+export const clearLikedJobs = () => {
+    return {type: CLEAR_LIKED_JOBS};
+}
