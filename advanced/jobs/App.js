@@ -3,7 +3,8 @@ import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import {Provider} from 'react-redux';
-import store from './src/store';
+import {PersistGate} from 'redux-persist/integration/react'
+import {store, persistor} from './src/store';
 import AuthScreen from './src/screens/AuthScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import MapScreen from './src/screens/MapScreen';
@@ -32,8 +33,10 @@ const App = createAppContainer(MainNavigator);
 
 export default () => {return (
     <Provider store={store}>
-        <App
-            ref={(navigator) => {
-                setNavigator(navigator)
+        <PersistGate persistor={persistor} loading={null}>
+            <App
+                ref={(navigator) => {
+                    setNavigator(navigator)
             }}/>
+        </PersistGate>
     </Provider>)}
