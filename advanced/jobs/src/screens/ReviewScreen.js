@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Platform} from 'react-native';
-import { Button } from 'react-native-elements';
+import {connect} from 'react-redux';
+
 class ReviewScreen extends Component {    
     render(){
         return(
@@ -23,4 +24,8 @@ ReviewScreen.navigationOptions = ({navigation}) => {
     }
 }
 
-export default ReviewScreen;
+mapStateToProps = (state) => {
+    return {likeReducer: state.likeReducer};
+}
+
+export default connect(mapStateToProps)(ReviewScreen);
